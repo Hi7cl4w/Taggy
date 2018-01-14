@@ -52,14 +52,12 @@ import UIKit
             let layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
             layout.scrollDirection = .vertical
             layout.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-            //layout.itemSize = CGSize(width: 100, height: 30)
             self.collectionView = UICollectionView(frame: self.frame, collectionViewLayout: layout)
             collectionView?.delegate   = self
             collectionView?.dataSource = self
             let bundle = Bundle(for: self.classForCoder)
             let taggyCell = UINib(nibName: "TaggyCell", bundle: bundle)
             self.collectionView?.register(taggyCell, forCellWithReuseIdentifier: "taggycell")
-            //self.collectionView?.register(TaggyCell.self, forCellWithReuseIdentifier: "taggycell")
             collectionView?.backgroundColor = tagBackgroundColor
             addArrangedSubview(collectionView!)
         }
@@ -88,9 +86,6 @@ import UIKit
             return CGSize.init(width: button.frame.size.width+10, height: 30)
         }
         var size=CGSize.init(width: 100, height: 30)
-        if(indexPath.row%2==0){
-            size=CGSize.init(width: 50, height: 30)
-        }
         return size
     }
     
