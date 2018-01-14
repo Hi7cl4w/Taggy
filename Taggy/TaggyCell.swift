@@ -8,7 +8,7 @@
 
 import UIKit
 
-class TaggyCell: UICollectionViewCell {
+internal class TaggyCell: UICollectionViewCell {
     
     @IBOutlet weak var button: UIButton!
     var title:String=""{
