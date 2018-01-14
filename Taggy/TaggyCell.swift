@@ -17,6 +17,31 @@ internal class TaggyCell: UICollectionViewCell {
         }
     }
     
+    var tagColor: UIColor=UIColor(red: 87.0/255.0, green: 190.0/255.0, blue: 212.0/255.0, alpha: 1.0){
+        didSet {
+            button.backgroundColor=tagColor
+        }
+    }
+    
+   var tagTextColor: UIColor=UIColor.white{
+        didSet {
+            button.titleLabel?.textColor = tagTextColor
+            button.setTitleColor(tagTextColor, for: .normal)
+        }
+    }
+    
+    var tagBorderColor: UIColor=UIColor.clear{
+        didSet {
+            if(tagBorderColor==UIColor.clear){
+                button.layer.borderWidth = 0
+                button.layer.borderColor=tagBorderColor.cgColor
+            }else{
+                button.layer.borderWidth = 1
+                button.layer.borderColor=tagBorderColor.cgColor
+            }
+        }
+    }
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         setupButton()
@@ -27,5 +52,5 @@ internal class TaggyCell: UICollectionViewCell {
         button.layer.cornerRadius=10
         
     }
-
+    
 }

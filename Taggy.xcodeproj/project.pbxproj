@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		9219217B200C088F005F12E2 /* TaggyAlignLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9219217A200C088F005F12E2 /* TaggyAlignLayout.swift */; };
 		92AA947C200B844F00BFA7DA /* Taggy.h in Headers */ = {isa = PBXBuildFile; fileRef = 92AA947A200B844F00BFA7DA /* Taggy.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		92E04B2F200B8555006D4E7D /* Taggy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92E04B2E200B8555006D4E7D /* Taggy.swift */; };
 		92E04B40200BB28B006D4E7D /* TaggyCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92E04B3E200BB28B006D4E7D /* TaggyCell.swift */; };
@@ -14,6 +15,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		9219217A200C088F005F12E2 /* TaggyAlignLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaggyAlignLayout.swift; sourceTree = "<group>"; };
 		92AA9477200B844F00BFA7DA /* Taggy.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Taggy.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		92AA947A200B844F00BFA7DA /* Taggy.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Taggy.h; sourceTree = "<group>"; };
 		92AA947B200B844F00BFA7DA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -57,6 +59,7 @@
 				92E04B2E200B8555006D4E7D /* Taggy.swift */,
 				92E04B3E200BB28B006D4E7D /* TaggyCell.swift */,
 				92E04B3F200BB28B006D4E7D /* TaggyCell.xib */,
+				9219217A200C088F005F12E2 /* TaggyAlignLayout.swift */,
 			);
 			path = Taggy;
 			sourceTree = "<group>";
@@ -143,6 +146,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				92E04B2F200B8555006D4E7D /* Taggy.swift in Sources */,
+				9219217B200C088F005F12E2 /* TaggyAlignLayout.swift in Sources */,
 				92E04B40200BB28B006D4E7D /* TaggyCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

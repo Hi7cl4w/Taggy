@@ -8,29 +8,72 @@
 
 import UIKit
 
-@IBDesignable open class Taggy: UIStackView, UICollectionViewDelegate, UICollectionViewDataSource {
+@IBDesignable open class Taggy: _Taggy{
+    public override func setTags(_ tags:Array<String>){
+        self.tagsCount=tags.count
+        self.tags=tags
+    }
+    public var delegate: TaggyDelegate?{
+        didSet{
+            self._delegate=delegate
+        }
+    }
     
-    var collectionView:UICollectionView?
-    
-    @IBInspectable var tagsCount: Int = 2 {
+    @IBInspectable var tagColor: UIColor=UIColor(red: 87.0/255.0, green: 190.0/255.0, blue: 212.0/255.0, alpha: 1.0){
         didSet {
-            for index in tags.count...tagsCount-1 {
-                tags.insert(" ", at: index)
-            }
-            setupButtons()
+            self._tagColor = tagColor
+            collectionView?.reloadData()
+        }
+    }
+    
+    @IBInspectable var tagBorderColor: UIColor=UIColor.clear{
+        didSet {
+            self._tagBorderColor = tagBorderColor
+            collectionView?.reloadData()
+        }
+    }
+    
+    @IBInspectable var tagTextColor: UIColor=UIColor.white{
+        didSet {
+            self._tagTextColor = tagTextColor
             collectionView?.reloadData()
         }
     }
     
     @IBInspectable var tagBackgroundColor: UIColor=UIColor.white{
         didSet {
-             collectionView?.backgroundColor = tagBackgroundColor
+            self._tagBackgroundColor = tagBackgroundColor
+            collectionView?.reloadData()
+        }
+    }
+}
+
+@IBDesignable open class _Taggy: UIStackView, UICollectionViewDelegate, UICollectionViewDataSource {
+    
+    var collectionView:UICollectionView?
+    public var _delegate:TaggyDelegate?
+    
+    @IBInspectable var tagsCount: Int = 2{
+        didSet {
+            for index in tags.count...tagsCount-1 {
+                tags.insert(" ", at: index)
+            }
+            setupTags()
+            collectionView?.reloadData()
         }
     }
     
-    var tags: Array<String> = [] {
+    var _tagColor: UIColor=UIColor(red: 87.0/255.0, green: 190.0/255.0, blue: 212.0/255.0, alpha: 1.0)
+    
+    var _tagBorderColor: UIColor=UIColor.clear
+    
+    var _tagTextColor: UIColor=UIColor.white
+    
+    var _tagBackgroundColor: UIColor=UIColor.white
+    
+    public var tags: Array<String> = [] {
         didSet {
-            setupButtons()
+            setupTags()
             collectionView?.reloadData()
         }
     }
@@ -39,41 +82,64 @@ import UIKit
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        setupButtons()
+        setupTags()
     }
     
     required public init(coder: NSCoder) {
         super.init(coder: coder)
-        setupButtons()
+        setupTags()
+    }
+    
+    public func setTags(_ tags:Array<String>){
+        self.tagsCount=tags.count
+        self.tags=tags
     }
     
     private func setCollectionView(){
         if(collectionView==nil){
-            let layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
+            let layout: TaggyAlignLayout = TaggyAlignLayout()
             layout.scrollDirection = .vertical
             layout.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+            layout.minimumLineSpacing=0
+            layout.minimumInteritemSpacing=0
             self.collectionView = UICollectionView(frame: self.frame, collectionViewLayout: layout)
             collectionView?.delegate   = self
             collectionView?.dataSource = self
             let bundle = Bundle(for: self.classForCoder)
             let taggyCell = UINib(nibName: "TaggyCell", bundle: bundle)
             self.collectionView?.register(taggyCell, forCellWithReuseIdentifier: "taggycell")
-            collectionView?.backgroundColor = tagBackgroundColor
+            collectionView?.backgroundColor = _tagBackgroundColor
             addArrangedSubview(collectionView!)
         }
     }
     
     public func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell=collectionView.dequeueReusableCell(withReuseIdentifier: "taggycell", for: indexPath) as! TaggyCell
+        cell.button.tag = indexPath.item
+        cell.button.addTarget(self, action: #selector(_Taggy.didTagSelected(_:)), for: .touchUpInside)
+        cell.tagColor=_tagColor
+        cell.tagTextColor=_tagTextColor
+        cell.tagBorderColor=_tagBorderColor
         if indexPath.row<tags.count{
             cell.title=tags[indexPath.row]
         }
         return cell
     }
     
+    @objc func didTagSelected(_ sender: UIButton) {
+        
+        print(sender.tag)
+        _delegate?.didSelectTagAt(index: sender.tag, title: tags[sender.tag])
+    }
+    
     public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let cell=collectionView.dequeueReusableCell(withReuseIdentifier: "taggycell", for: indexPath) as! TaggyCell
+        if indexPath.row<tags.count{
+            _delegate?.didSelectTagAt(index: indexPath.row, title: tags[indexPath.row])
+        }
     }
+    
+    
     
     @objc func collectionView(_ collectionView: UICollectionView,
                               layout collectionViewLayout: UICollectionViewLayout,
@@ -83,9 +149,9 @@ import UIKit
             button.setTitle(tags[indexPath.row], for: .normal)
             button.sizeToFit()
             print(button.frame.size)
-            return CGSize.init(width: button.frame.size.width+10, height: 30)
+            return CGSize.init(width: button.frame.size.width+20, height: 35)
         }
-        var size=CGSize.init(width: 100, height: 30)
+        let size=CGSize.init(width: 100, height: 35)
         return size
     }
     
@@ -97,8 +163,12 @@ import UIKit
         return tagsCount
     }
     
-    private func setupButtons() {
+    func setupTags() {
         setCollectionView()
     }
     
+}
+
+public protocol TaggyDelegate {
+    func didSelectTagAt(index:Int,title:String)
 }
