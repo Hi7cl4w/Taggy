@@ -116,6 +116,9 @@ import UIKit
         
         if let collectionView=collectionView{
             collectionView.reloadData()
+            let size=collectionView.collectionViewLayout.collectionViewContentSize
+            collectionView.frame.size=CGSize.init(width: collectionView.frame.size.width, height:  size.height)
+            self.frame=collectionView.frame
         }
         
     }
