@@ -130,6 +130,9 @@ import UIKit
         cell.tagColor=_tagColor
         cell.textColor=_tagTextColor
         cell.borderColor=_tagBorderColor
+        if ((_delegate?.tagForItemAt) != nil){
+            _delegate?.tagForItemAt!(index: indexPath.row, taggyCell: cell)
+        }
         if indexPath.row<tags.count{
             cell.title=tags[indexPath.row]
         }
