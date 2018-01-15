@@ -128,8 +128,8 @@ import UIKit
         cell.button.tag = indexPath.item
         cell.button.addTarget(self, action: #selector(_Taggy.didTagSelected(_:)), for: .touchUpInside)
         cell.tagColor=_tagColor
-        cell.tagTextColor=_tagTextColor
-        cell.tagBorderColor=_tagBorderColor
+        cell.textColor=_tagTextColor
+        cell.borderColor=_tagBorderColor
         if indexPath.row<tags.count{
             cell.title=tags[indexPath.row]
         }
@@ -176,6 +176,7 @@ import UIKit
     
 }
 
-public protocol TaggyDelegate {
+@objc public protocol TaggyDelegate {
     func didSelectTagAt(index:Int,title:String)
+    @objc optional func tagForItemAt(index: Int, taggyCell: TaggyCell)
 }
