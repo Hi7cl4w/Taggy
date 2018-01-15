@@ -53,10 +53,12 @@ import UIKit
     var collectionView:UICollectionView?
     public var _delegate:TaggyDelegate?
     
-    @IBInspectable var tagsCount: Int = 2{
+    @IBInspectable var tagsCount: Int = 10{
         didSet {
-            for index in tags.count...tagsCount-1 {
-                tags.insert(" ", at: index)
+            if(tags.count<tagsCount){
+                for index in tags.count...tagsCount-1 {
+                    tags.insert("Tag \(index)", at: index)
+                }
             }
             setupTags()
             collectionView?.reloadData()
