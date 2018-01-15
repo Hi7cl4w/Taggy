@@ -151,6 +151,8 @@ import UIKit
         cell.textColor=_tagTextColor
         cell.borderColor=_tagBorderColor
         cell.textHighlightColor=_tagTextHighlightColor
+        cell.highlightColor=_tagHighlightColor
+        cell.borderHighlightColor=_tagBorderHighlightColor
         if ((_delegate?.tagForItemAt) != nil){
             _delegate?.tagForItemAt!(index: indexPath.row, taggyCell: cell)
         }
@@ -169,15 +171,7 @@ import UIKit
         if let cells=collectionView?.visibleCells as? [TaggyCell]{
             for cell in cells{
                 if cell.button.isSelected==true{
-                    cell.button.layer.borderWidth=0
-                    button.transform = CGAffineTransform(scaleX: 0.8, y: 0.8)
-                    UIView.animate(withDuration: 0.5,delay: 0,usingSpringWithDamping: 3,initialSpringVelocity: 2.0,options: .allowUserInteraction,animations: { [weak self] in
-                        cell.button.isSelected=false
-                        cell.button.backgroundColor=cell.tagColor
-                        cell.button.transform = .identity
-                    }, completion:nil)
-                    cell.button.layer.borderColor=cell.borderColor.cgColor
-                    cell.button.layer.borderWidth=1
+                    cell.setTagSelected(false)
                 }
             }
         }
