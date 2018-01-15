@@ -129,8 +129,6 @@ import UIKit
     }
     
     @objc func didTagSelected(_ sender: UIButton) {
-        
-        print(sender.tag)
         _delegate?.didSelectTagAt(index: sender.tag, title: tags[sender.tag])
     }
     
@@ -150,7 +148,6 @@ import UIKit
             let button=UIButton.init()
             button.setTitle(tags[indexPath.row], for: .normal)
             button.sizeToFit()
-            print(button.frame.size)
             return CGSize.init(width: button.frame.size.width+20, height: 35)
         }
         let size=CGSize.init(width: 100, height: 35)
