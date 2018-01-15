@@ -22,28 +22,28 @@ import UIKit
     @IBInspectable var tagColor: UIColor=UIColor(red: 87.0/255.0, green: 190.0/255.0, blue: 212.0/255.0, alpha: 1.0){
         didSet {
             self._tagColor = tagColor
-            collectionView?.reloadData()
+            setupTags()
         }
     }
     
     @IBInspectable var tagBorderColor: UIColor=UIColor.clear{
         didSet {
             self._tagBorderColor = tagBorderColor
-            collectionView?.reloadData()
+            setupTags()
         }
     }
     
     @IBInspectable var tagTextColor: UIColor=UIColor.white{
         didSet {
             self._tagTextColor = tagTextColor
-            collectionView?.reloadData()
+            setupTags()
         }
     }
     
     @IBInspectable var tagBackgroundColor: UIColor=UIColor.white{
         didSet {
             self._tagBackgroundColor = tagBackgroundColor
-            collectionView?.reloadData()
+            setupTags()
         }
     }
 }
@@ -61,7 +61,6 @@ import UIKit
                 }
             }
             setupTags()
-            collectionView?.reloadData()
         }
     }
     
@@ -76,7 +75,6 @@ import UIKit
     public var tags: Array<String> = [] {
         didSet {
             setupTags()
-            collectionView?.reloadData()
         }
     }
     
@@ -104,6 +102,7 @@ import UIKit
             layout.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
             layout.minimumLineSpacing=0
             layout.minimumInteritemSpacing=0
+            layout.itemSize=CGSize.init(width: 100, height: 35)
             self.collectionView = UICollectionView(frame: self.frame, collectionViewLayout: layout)
             collectionView?.delegate   = self
             collectionView?.dataSource = self
@@ -111,8 +110,14 @@ import UIKit
             let taggyCell = UINib(nibName: "TaggyCell", bundle: bundle)
             self.collectionView?.register(taggyCell, forCellWithReuseIdentifier: "taggycell")
             collectionView?.backgroundColor = _tagBackgroundColor
+            //collectionView?.isScrollEnabled=false
             addArrangedSubview(collectionView!)
         }
+        
+        if let collectionView=collectionView{
+            collectionView.reloadData()
+        }
+        
     }
     
     public func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
