@@ -110,7 +110,7 @@ import UIKit
             let taggyCell = UINib(nibName: "TaggyCell", bundle: bundle)
             self.collectionView?.register(taggyCell, forCellWithReuseIdentifier: "taggycell")
             collectionView?.backgroundColor = _tagBackgroundColor
-            //collectionView?.isScrollEnabled=false
+            collectionView?.isScrollEnabled=false
             addArrangedSubview(collectionView!)
         }
         
