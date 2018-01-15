@@ -29,6 +29,13 @@ open class TaggyCell: _TaggyCell {
         }
     }
     
+    open var textHighlightColor: UIColor=UIColor.white{
+        didSet {
+            button.setTitleColor(textHighlightColor, for: .highlighted)
+            button.setTitleColor(textHighlightColor, for: .selected)
+        }
+    }
+    
     open var borderColor: UIColor=UIColor.clear{
         didSet {
             if(borderColor==UIColor.clear){

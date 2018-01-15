@@ -40,9 +40,23 @@ import UIKit
         }
     }
     
-    @IBInspectable var tagBackgroundColor: UIColor=UIColor.white{
+    @IBInspectable var tagHighlightColor: UIColor=UIColor(red: 234.0/255.0, green: 59.0/255.0, blue: 128.0/255.0, alpha: 1.0){
         didSet {
-            self._tagBackgroundColor = tagBackgroundColor
+            self._tagHighlightColor = tagHighlightColor
+            setupTags()
+        }
+    }
+    
+    @IBInspectable var tagBorderHighlightColor: UIColor=UIColor(red: 234.0/255.0, green: 59.0/255.0, blue: 128.0/255.0, alpha: 1.0){
+        didSet {
+            self._tagBorderHighlightColor = tagBorderHighlightColor
+            setupTags()
+        }
+    }
+    
+    @IBInspectable var tagTextHighlightColor: UIColor=UIColor.white{
+        didSet {
+            self._tagTextHighlightColor = tagTextHighlightColor
             setupTags()
         }
     }
@@ -69,6 +83,12 @@ import UIKit
     var _tagBorderColor: UIColor=UIColor.clear
     
     var _tagTextColor: UIColor=UIColor.white
+    
+    var _tagHighlightColor: UIColor=UIColor(red: 234.0/255.0, green: 59.0/255.0, blue: 128.0/255.0, alpha: 1.0)
+    
+    var _tagBorderHighlightColor: UIColor=UIColor(red: 234.0/255.0, green: 59.0/255.0, blue: 128.0/255.0, alpha: 1.0)
+    
+    var _tagTextHighlightColor: UIColor=UIColor.white
     
     var _tagBackgroundColor: UIColor=UIColor.white
     
@@ -99,10 +119,10 @@ import UIKit
         if(collectionView==nil){
             let layout: TaggyAlignLayout = TaggyAlignLayout()
             layout.scrollDirection = .vertical
-            layout.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-            layout.minimumLineSpacing=0
-            layout.minimumInteritemSpacing=0
-            layout.itemSize=CGSize.init(width: 100, height: 35)
+            layout.sectionInset = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
+            layout.minimumLineSpacing=5
+            layout.minimumInteritemSpacing=5
+            layout.itemSize=CGSize.init(width: 100, height: 32)
             self.collectionView = UICollectionView(frame: self.frame, collectionViewLayout: layout)
             collectionView?.delegate   = self
             collectionView?.dataSource = self
@@ -130,6 +150,7 @@ import UIKit
         cell.tagColor=_tagColor
         cell.textColor=_tagTextColor
         cell.borderColor=_tagBorderColor
+        cell.textHighlightColor=_tagTextHighlightColor
         if ((_delegate?.tagForItemAt) != nil){
             _delegate?.tagForItemAt!(index: indexPath.row, taggyCell: cell)
         }
@@ -140,16 +161,41 @@ import UIKit
     }
     
     @objc func didTagSelected(_ sender: UIButton) {
+        setButtonSelected(sender)
         _delegate?.didSelectTagAt(index: sender.tag, title: tags[sender.tag])
     }
     
-    public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let cell=collectionView.dequeueReusableCell(withReuseIdentifier: "taggycell", for: indexPath) as! TaggyCell
-        if indexPath.row<tags.count{
-            _delegate?.didSelectTagAt(index: indexPath.row, title: tags[indexPath.row])
+    func setButtonSelected(_ button: UIButton){
+        if let cells=collectionView?.visibleCells as? [TaggyCell]{
+            for cell in cells{
+                if cell.button.isSelected==true{
+                    cell.button.layer.borderWidth=0
+                    button.transform = CGAffineTransform(scaleX: 0.8, y: 0.8)
+                    UIView.animate(withDuration: 0.5,delay: 0,usingSpringWithDamping: 3,initialSpringVelocity: 2.0,options: .allowUserInteraction,animations: { [weak self] in
+                        cell.button.isSelected=false
+                        cell.button.backgroundColor=cell.tagColor
+                        cell.button.transform = .identity
+                    }, completion:nil)
+                    cell.button.layer.borderColor=cell.borderColor.cgColor
+                    cell.button.layer.borderWidth=1
+                }
+            }
         }
+        button.layer.borderWidth=0
+        button.transform = CGAffineTransform(scaleX: 0.5, y: 0.5)
+        UIView.animate(withDuration: 0.5,delay: 0,usingSpringWithDamping: 5,initialSpringVelocity: 2.0,options: .allowUserInteraction,animations: { [weak self] in
+            button.isSelected=true
+            button.backgroundColor=self?._tagHighlightColor
+            button.transform = .identity
+            },completion: nil)
+        button.layer.borderColor=self._tagBorderHighlightColor.cgColor
+        button.layer.borderWidth=1
+        
     }
     
+    func setSelectedAt(){
+        
+    }
     
     
     @objc func collectionView(_ collectionView: UICollectionView,
@@ -159,9 +205,9 @@ import UIKit
             let button=UIButton.init()
             button.setTitle(tags[indexPath.row], for: .normal)
             button.sizeToFit()
-            return CGSize.init(width: button.frame.size.width+20, height: 35)
+            return CGSize.init(width: button.frame.size.width+20, height: 32)
         }
-        let size=CGSize.init(width: 100, height: 35)
+        let size=CGSize.init(width: 100, height: 32)
         return size
     }
     
