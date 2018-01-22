@@ -19,6 +19,15 @@ import UIKit
         }
     }
     
+    public var selectedTagIndex:Int?{
+        set{
+            self._selectedTagIndex=newValue
+        }
+        get{
+            return self._selectedTagIndex
+        }
+    }
+    
     @IBInspectable var tagColor: UIColor=UIColor(red: 87.0/255.0, green: 190.0/255.0, blue: 212.0/255.0, alpha: 1.0){
         didSet {
             self._tagColor = tagColor
@@ -75,6 +84,12 @@ import UIKit
                 }
             }
             setupTags()
+        }
+    }
+    
+    public var _selectedTagIndex:Int?{
+        didSet{
+            self.collectionView?.reloadData()
         }
     }
     
@@ -159,12 +174,21 @@ import UIKit
         if indexPath.row<tags.count{
             cell.title=tags[indexPath.row]
         }
+        if let tagIndex=_selectedTagIndex{
+            if tagIndex==indexPath.item{
+                cell.setTagSelected(true)
+            }
+        }
         return cell
     }
     
     @objc func didTagSelected(_ sender: UIButton) {
+        let index=sender.tag
+        self._selectedTagIndex=index
         setButtonSelected(sender)
-        _delegate?.didSelectTagAt(index: sender.tag, title: tags[sender.tag])
+        DispatchQueue.main.async {
+            self._delegate?.didSelectTagAt(index: index, title: self.tags[sender.tag])
+        }
     }
     
     func setButtonSelected(_ button: UIButton){
